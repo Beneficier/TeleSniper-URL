@@ -1,22 +1,41 @@
 import time
+import re
 from telethon import TelegramClient
 from telethon.errors import FloodWaitError, UsernameOccupiedError, PhoneNumberBannedError, ChannelPrivateError
 from telethon.tl.functions.channels import CreateChannelRequest, UpdateUsernameRequest
 from telethon.tl.functions.account import CheckUsernameRequest
 
-API_ID = 'YOUR_API_ID'  
-API_HASH = 'YOUR_API_HASH'  
-PHONE_NUMBER = 'YOUR_PHONE_NUMBER'  
+# Configuration
+API_ID = ''  
+API_HASH = ''  
+PHONE_NUMBER = ''
 CHECK_INTERVAL = 15  
 
 client = TelegramClient('telesniper_session', API_ID, API_HASH)
 
+def extract_username(text):
+    """Extrait un nom d'utilisateur à partir d'une URL ou d'un texte."""
+    match = re.search(r'@?([a-zA-Z0-9_]{5,32})$', text)  # Assure que le username est alphanumérique avec 5 à 32 caractères
+    if match:
+        return match.group(1)
+    return None
+
 def get_usernames_from_file(file_path):
+    """Lit les noms d'utilisateur depuis le fichier texte."""
     with open(file_path, 'r') as file:
-        usernames = file.read().splitlines()
+        lines = file.read().splitlines()
+    
+    usernames = []
+    for line in lines:
+        username = extract_username(line)
+        if username:
+            usernames.append(username)
+        else:
+            print(f"❌ Nom d'utilisateur non valide : {line}")
     return usernames
 
 async def check_username_availability(username):
+    """Vérifie si un nom d'utilisateur est disponible."""
     try:
         result = await client(CheckUsernameRequest(username))
         return result
@@ -25,9 +44,10 @@ async def check_username_availability(username):
         return False
 
 async def create_public_channel(username):
+    """Crée un canal public avec le nom d'utilisateur donné et définit l'URL du canal."""
     try:
         channel_name = f"{username} Sniper"
-        description = f"URL Snipée par @benenficier"
+        description = f"URL Snipée par @BeneficierID"
         result = await client(CreateChannelRequest(
             title=channel_name,
             about=description,
