@@ -6,9 +6,9 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.channels import GetChannelsRequest
 
 # Configuration
-API_ID = '29201382'  # Votre API_ID Telegram
-API_HASH = '112aeb6a52c63d73f1787ecc38082b50'  # Votre API_HASH Telegram
-PHONE_NUMBER = '+62 819 39031356'  # Votre numéro de téléphone Telegram
+API_ID = ''  # Votre API_ID Telegram
+API_HASH = ''  # Votre API_HASH Telegram
+PHONE_NUMBER = ''  # Votre numéro de téléphone Telegram
 CHECK_INTERVAL = 15  # Intervalle de vérification en secondes
 
 # Connexion au client Telegram
